@@ -25,7 +25,7 @@ function Button({ node, onClick }) {
   const btn = document.createElement("button");
 
   this.render = () => {
-    btn.innerHTML = "+";
+    btn.textContent = "+";
     btn.addEventListener("click", onClick);
     return;
   };
