@@ -1,57 +1,46 @@
-function Text({ node, initalState }) {
-  this.state = initalState;
-  const p = document.createElement("p");
+import Component from "./core.js";
 
-  this.setState = (nextState) => {
-    this.state = { ...this.state, ...nextState };
-    this.render();
-  };
-
-  this.render = () => {
-    p.textContent = `Count: ${this.state.count}`;
-    return;
-  };
-
-  this.init = () => {
-    // 초기화를 위해서 선언
-    node.appendChild(p);
-    this.render();
-  };
-
-  this.init();
+class Text extends Component {
+  template() {
+    return `<p>Count: ${this.state}</p>`;
+  }
 }
 
-function Button({ node, onClick }) {
-  const btn = document.createElement("button");
+class Button extends Component {
+  template() {
+    return `<button>+</button>`;
+  }
 
-  this.render = () => {
-    btn.textContent = "+";
-    btn.addEventListener("click", onClick);
-    return;
-  };
-
-  this.init = () => {
-    node.appendChild(btn);
-    this.render();
-  };
-
-  this.init();
+  setEvent() {
+    this.target
+      .querySelector("button")
+      .addEventListener("click", () => this.state());
+  }
 }
 
-function App({ target, initalState }) {
-  this.state = initalState;
+class App extends Component {
+  init() {
+    this.state = {
+      count: 0,
+    };
+    this.onClick = () => this.setState({ count: this.state.count + 1 });
+  }
 
-  this.setState = (nextState) => {
-    this.state = { ...this.state, ...nextState };
-    text.setState(this.state);
-  };
+  template() {
+    return `<header class="header"></header>
+    <ul class="list"></ul>
+    `;
+  }
 
-  const onClick = () => {
-    this.setState({ ...this.state, count: this.state.count + 1 });
-  };
-
-  const text = new Text({ node: target, initalState: this.state });
-  new Button({ node: target, onClick });
+  mounted() {
+    const header = document.querySelector(".header");
+    const list = document.querySelector(".list");
+    new Text({
+      target: list,
+      initalState: this.state.count,
+    });
+    new Button({ target: header, initalState: this.onClick });
+  }
 }
 
-new App({ target: document.querySelector("#app"), initalState: { count: 0 } });
+new App({ target: document.querySelector("#app") });
